@@ -1,0 +1,140 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.example.githubtestapp"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            shrinkResources true
+            signingConfig signingConfigs.debug
+
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def fileName = "github-release.apk"
+                    outputFileName = fileName
+                }
+            }
+        }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            shrinkResources false
+
+            signingConfig signingConfigs.debug
+
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def fileName = "github-debug.apk"
+                    outputFileName = fileName
+                }
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            'src/main/res/',
+                            'src/main/res/layouts/fragments',
+                            'src/main/res/layouts/activity',
+                            'src/main/res/layouts/views',
+                    ]
+        }
+    }
+}
+
+ext {
+    appcompat = '1.1.0-alpha02'
+    androidX = '1.1.0-alpha03'
+    materialDesign = '1.1.0-alpha05'
+    constraintLayout = '1.1.3'
+    lifecycleExtensions = '2.0.0'
+    cardView = '1.0.0'
+    materialDesign = '1.1.0-alpha05'
+
+    dagger2 = '2.17'
+    dagger2Compiler = '2.17'
+    rxjava2 = '2.1.9'
+    rxandroid = '2.1.0'
+    kotlinRx = '2.3.0'
+
+    mvvmCleanArchLibrary = '1.10'
+    multidex = '1.0.3'
+    ktxCore = '1.0.1'
+
+    paging = '2.1.0'
+    glide = '4.9.0'
+
+    authService = '16.0.1'
+    cicerone = '5.0.0'
+    circleImage = '3.0.0'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation project(':githublibrary')
+
+    implementation "androidx.appcompat:appcompat:$appcompat"
+    implementation "androidx.core:core-ktx:$ktxCore"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
+    implementation "androidx.cardview:cardview:$cardView"
+    implementation "androidx.recyclerview:recyclerview:$androidX"
+    implementation "androidx.annotation:annotation:$androidX"
+    implementation "com.google.android.material:material:$materialDesign"
+
+    implementation "android.arch.lifecycle:extensions:$lifecycleExtensions"
+    kapt "android.arch.lifecycle:compiler:$lifecycleExtensions"
+    implementation "android.arch.persistence.room:rxjava2:$lifecycleExtensions"
+    kapt "android.arch.persistence.room:compiler:$lifecycleExtensions"
+
+    implementation "com.google.dagger:dagger:$dagger2"
+    kapt "com.google.dagger:dagger-compiler:$dagger2Compiler"
+    compileOnly 'javax.annotation:jsr250-api:1.0'
+
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava2"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid"
+    implementation "io.reactivex.rxjava2:rxkotlin:$kotlinRx"
+
+    implementation "com.github.bumptech.glide:glide:$glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide"
+
+    implementation "androidx.paging:paging-runtime:$paging"
+    implementation "androidx.paging:paging-rxjava2:$paging"
+
+    implementation "ru.terrakok.cicerone:cicerone:$cicerone"
+    implementation "de.hdodenhof:circleimageview:$circleImage"
+
+    implementation "com.github.Merseyside.mvvm-clean-arch-library:library:$mvvmCleanArchLibrary"
+
+    implementation "com.google.android.gms:play-services-auth:$authService"
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+}
