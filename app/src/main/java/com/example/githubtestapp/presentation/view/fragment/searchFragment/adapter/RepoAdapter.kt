@@ -32,7 +32,6 @@ class RepoAdapter : BasePagedAdapter<RepositoryModel>(RepositoryModel.diffCallba
         super.onBindViewHolder(holder, position)
 
         holder.itemView.setOnClickListener {
-            Log.d(TAG, "onClick")
             getOnItemClickListener()?.onItemClicked(getItem(position) as RepositoryModel)
         }
 

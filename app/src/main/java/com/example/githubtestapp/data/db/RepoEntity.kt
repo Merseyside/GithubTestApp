@@ -23,9 +23,5 @@ data class RepoEntity(
 
     @NonNull
     @ColumnInfo(name = "description")
-    val description: String,
-
-    @NonNull
-    @ColumnInfo
-    val page: Int
+    val description: String
 )

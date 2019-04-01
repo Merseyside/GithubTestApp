@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.githubtestapp.data.repository.datasource.RepositoryDataSourceFactory
+import com.example.githubtestapp.domain.interactor.SaveRepoInteractor
 import com.example.githubtestapp.presentation.view.fragment.searchFragment.model.SearchFragmentViewModel
 import com.upstream.basemvvmimpl.presentation.fragment.BaseFragment
 import dagger.Module
@@ -17,8 +18,9 @@ class SearchFragmentModule(private val fragment : BaseFragment) {
     @Provides
     internal fun searchFragmentViewModelProvider(
         router: Router,
-        repositoryDataSource: RepositoryDataSourceFactory): ViewModelProvider.Factory {
-        return SearchFragmentViewModelProviderFactory(router, repositoryDataSource)
+        repositoryDataSource: RepositoryDataSourceFactory,
+        saveRepoUseCase: SaveRepoInteractor): ViewModelProvider.Factory {
+        return SearchFragmentViewModelProviderFactory(router, repositoryDataSource, saveRepoUseCase)
     }
 
     @Provides
@@ -28,12 +30,13 @@ class SearchFragmentModule(private val fragment : BaseFragment) {
 
     class SearchFragmentViewModelProviderFactory(
         private val router : Router,
-        private val repositoryDataSource: RepositoryDataSourceFactory
+        private val repositoryDataSource: RepositoryDataSourceFactory,
+        private val saveRepoUseCase: SaveRepoInteractor
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass == SearchFragmentViewModel::class.java) {
-                return SearchFragmentViewModel(router, repositoryDataSource) as T
+                return SearchFragmentViewModel(router, repositoryDataSource, saveRepoUseCase) as T
             }
             throw IllegalArgumentException("Unknown class title")
         }

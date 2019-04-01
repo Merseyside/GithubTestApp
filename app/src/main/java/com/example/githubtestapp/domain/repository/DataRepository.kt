@@ -9,4 +9,6 @@ interface DataRepository {
     fun getRepositories(limit: Int, page: Int, findString: String) : Single<List<RepositoryModel>>
 
     fun getRepoDetails(fullName: String) : Single<DetailResponse>
+
+    fun saveRepository(repository: RepositoryModel) : Single<Boolean>
 }

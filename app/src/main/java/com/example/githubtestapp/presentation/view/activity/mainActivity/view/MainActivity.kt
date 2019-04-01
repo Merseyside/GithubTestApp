@@ -1,5 +1,6 @@
 package com.example.githubtestapp.presentation.view.activity.mainActivity.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -10,6 +11,7 @@ import com.example.githubtestapp.databinding.ActivityMainBinding
 import com.example.githubtestapp.presentation.base.BaseGithubActivity
 import com.example.githubtestapp.presentation.di.components.DaggerMainActivityComponent
 import com.example.githubtestapp.presentation.di.modules.MainActivityModule
+import com.example.githubtestapp.presentation.view.activity.authFragment.AuthActivity
 import com.example.githubtestapp.presentation.view.activity.mainActivity.model.MainViewModel
 import com.example.githubtestapp.presentation.view.activity.mainActivity.model.SharedViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -73,9 +75,8 @@ class MainActivity : BaseGithubActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun doLayout() {
-        viewDataBinding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        viewDataBinding.fab.setOnClickListener {
+            navigateToAuthActivity()
         }
     }
 
@@ -97,5 +98,14 @@ class MainActivity : BaseGithubActivity<ActivityMainBinding, MainViewModel>() {
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()
+    }
+
+    private fun navigateToAuthActivity() {
+        val intent = Intent(this, AuthActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+        intent.putExtra(AuthActivity.SIGN_OUT_KEY, true)
+
+        startActivity(intent)
+        finish()
     }
 }

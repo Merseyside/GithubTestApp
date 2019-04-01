@@ -8,14 +8,17 @@ import com.example.githubtestapp.data.repository.datasource.RepositoryDataSource
 import com.example.githubtestapp.data.repository.datasource.RepositoryDataSourceFactory
 import com.example.githubtestapp.data.repository.datasource.State
 import com.example.githubtestapp.domain.RepositoryModel
+import com.example.githubtestapp.domain.interactor.SaveRepoInteractor
 import com.example.githubtestapp.presentation.base.BaseGithubViewModel
 import com.example.githubtestapp.presentation.navigation.Screens
 import com.example.githubtestapp.presentation.view.fragment.savedFragment.model.RepoViewModel
+import com.upstream.basemvvmimpl.domain.interactor.DefaultSingleObserver
 import ru.terrakok.cicerone.Router
 
 class SearchFragmentViewModel(
     private val router: Router,
-    private val repositoryDataSourceFactory: RepositoryDataSourceFactory
+    private val repositoryDataSourceFactory: RepositoryDataSourceFactory,
+    private val saveRepoUseCase: SaveRepoInteractor
 ) : BaseGithubViewModel(), RepoViewModel {
 
     private val TAG = javaClass.simpleName
@@ -27,6 +30,7 @@ class SearchFragmentViewModel(
     }
 
     override fun dispose() {
+        repositoryDataSourceFactory.setFindString("")
         repositoryDataSourceFactory.getCompositeDisposables().dispose()
     }
 
@@ -64,6 +68,30 @@ class SearchFragmentViewModel(
     }
 
     fun saveRepository(repo: RepositoryModel) {
+        saveRepoUseCase.execute(SaveRepoObserver(), SaveRepoInteractor.Params(repo))
+    }
 
+    fun setFindString(str: String) {
+        clearDisposables()
+        repositoryDataSourceFactory.setFindString(str)
+
+        refresh()
+    }
+
+    private inner class SaveRepoObserver : DefaultSingleObserver<Boolean>() {
+
+        override fun onSuccess(obj: Boolean) {
+            super.onSuccess(obj)
+
+            if (obj) {
+                showMsg("Saved")
+            }
+        }
+
+        override fun onError(throwable: Throwable) {
+            super.onError(throwable)
+
+            showErrorMsg("Error occurs")
+        }
     }
 }

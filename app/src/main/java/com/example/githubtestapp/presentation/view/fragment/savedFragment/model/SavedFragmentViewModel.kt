@@ -9,6 +9,7 @@ import com.example.githubtestapp.data.db.RepoEntity
 import com.example.githubtestapp.data.entity.mapper.RepositoryDataMapper
 import com.example.githubtestapp.domain.RepositoryModel
 import com.example.githubtestapp.presentation.base.BaseGithubViewModel
+import com.example.githubtestapp.presentation.navigation.Screens
 import ru.terrakok.cicerone.Router
 
 class SavedFragmentViewModel(private val router: Router,
@@ -49,6 +50,6 @@ class SavedFragmentViewModel(private val router: Router,
     }
 
     override fun navigateToDetailsScreen() {
-        //router.navigateTo(Screens.DetailFragmentScreen())
+        router.navigateTo(Screens.DetailFragmentScreen())
     }
 }

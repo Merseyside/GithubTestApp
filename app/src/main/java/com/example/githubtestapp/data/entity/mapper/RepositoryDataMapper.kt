@@ -35,4 +35,14 @@ class RepositoryDataMapper @Inject constructor() {
             repoEntity.description
         )
     }
+
+    fun transformModel(repositoryModel: RepositoryModel) : RepoEntity {
+
+        return RepoEntity(
+                repositoryModel.id,
+                repositoryModel.name,
+                repositoryModel.fullName,
+                repositoryModel.description
+        )
+    }
 }

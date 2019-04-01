@@ -13,13 +13,13 @@ class RepoDataStoreFactory @Inject constructor(
     private val repositoryDataMapper: RepositoryDataMapper
 ) {
 
-    fun create() : GithubDataStore {
+    fun create() : RepoDataStore {
 
         return createCloudDataStore()
     }
 
-    fun createCloudDataStore() : CloudDataStore {
-        return CloudDataStore(GithubApi(context), repositoryDataMapper)
+    fun createCloudDataStore() : RepoCloudDataStore {
+        return RepoCloudDataStore(GithubApi(context), repositoryDataMapper)
     }
 
     fun createDbDataStore() : RepoDbDataStore {

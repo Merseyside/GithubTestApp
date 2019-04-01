@@ -22,6 +22,11 @@ class RepositoryDataSource(
 
     private val startPage = 1
 
+    companion object {
+        private var findString = ""
+    }
+
+
     var state: MutableLiveData<State> = MutableLiveData()
 
     private var retryCompletable: Completable? = null
@@ -30,7 +35,7 @@ class RepositoryDataSource(
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, RepositoryModel>) {
         updateState(State.LOADING, "")
 
-        dataRepository.getRepositories(params.requestedLoadSize, startPage, "")
+        dataRepository.getRepositories(params.requestedLoadSize, startPage, findString)
             .doOnSubscribe {
                 compositeDisposable.add(it)
             }
@@ -46,7 +51,8 @@ class RepositoryDataSource(
 
     @SuppressLint("CheckResult")
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, RepositoryModel>) {
-        dataRepository.getRepositories(params.requestedLoadSize, params.key, "")
+
+        dataRepository.getRepositories(params.requestedLoadSize, params.key, findString)
             .doOnSubscribe {
                 compositeDisposable.add(it)
             }
@@ -80,6 +86,10 @@ class RepositoryDataSource(
         } else {
             Completable.fromAction(action)
         }
+    }
+
+    fun setFindString(str: String) {
+        findString = str
     }
 
 }

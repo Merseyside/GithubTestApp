@@ -3,6 +3,7 @@ package com.example.githubtestapp.data.db
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import io.reactivex.Single
 
@@ -17,4 +18,7 @@ interface RepoDao {
 
     @Query("SELECT * FROM REPOS")
     fun getAllRepos() : Single<List<RepoEntity>>
+
+    @Insert
+    fun insert(repoEntity: RepoEntity) : Long
 }

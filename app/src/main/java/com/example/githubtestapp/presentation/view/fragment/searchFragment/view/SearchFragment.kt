@@ -1,9 +1,12 @@
 package com.example.githubtestapp.presentation.view.fragment.searchFragment.view
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.*
 import androidx.paging.PagedList
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -33,8 +36,6 @@ class SearchFragment : BaseGithubFragment<FragmentSearchBinding, SearchFragmentV
     private lateinit var adapter: RepoAdapter
 
     private val repoObserver = Observer<PagedList<RepositoryModel>> {
-
-        Log.d(TAG, "onObserve size = ${it.size}")
 
         adapter.submitList(it)
         viewDataBinding.swipeContainer.isRefreshing = false
@@ -83,6 +84,18 @@ class SearchFragment : BaseGithubFragment<FragmentSearchBinding, SearchFragmentV
 
     private fun doLayout() {
         viewDataBinding.swipeContainer.setOnRefreshListener(this)
+        viewDataBinding.search.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                adapter.submitList(null)
+                viewModel.setFindString(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        })
 
         viewDataBinding.repoList.layoutManager = WrapContentLinearLayoutManager(
             getApplicationContext(),
@@ -100,7 +113,6 @@ class SearchFragment : BaseGithubFragment<FragmentSearchBinding, SearchFragmentV
 
                 viewModel.navigateToDetailsScreen()
             }
-
         })
 
         adapter.setOnLongClickListener(object : RepoAdapter.OnLongClickListener {

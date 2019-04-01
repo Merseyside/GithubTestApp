@@ -13,18 +13,21 @@ class RepositoryDataSourceFactory @Inject constructor(
         private val dataRepository: DataRepository
 ): DataSource.Factory<Int, RepositoryModel>() {
 
+    private lateinit var repositoryDataSource: RepositoryDataSource
+
     private val compositeDisposable : CompositeDisposable = CompositeDisposable()
 
     val propertyDataSourceLiveData = MutableLiveData<RepositoryDataSource>()
 
     override fun create(): DataSource<Int, RepositoryModel> {
-        val propertyDataSource = RepositoryDataSource(dataRepository, compositeDisposable)
-        propertyDataSourceLiveData.postValue(propertyDataSource)
-        return propertyDataSource
+        repositoryDataSource = RepositoryDataSource(dataRepository, compositeDisposable)
+        propertyDataSourceLiveData.postValue(repositoryDataSource)
+        return repositoryDataSource
     }
 
-
-
+    fun setFindString(str: String) {
+        repositoryDataSource.setFindString(str)
+    }
 
     fun getCompositeDisposables() = compositeDisposable
 }

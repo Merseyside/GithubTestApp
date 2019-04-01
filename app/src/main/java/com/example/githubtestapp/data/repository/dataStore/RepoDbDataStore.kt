@@ -11,7 +11,18 @@ import java.lang.UnsupportedOperationException
 class RepoDbDataStore(
     repoDb : RepoDB,
     private val repositoryDataMapper: RepositoryDataMapper
-) : BaseDBSource<RepoDB>(repoDb), GithubDataStore {
+) : BaseDBSource<RepoDB>(repoDb), RepoDataStore {
+
+    override fun saveRepo(repositoryModel: RepositoryModel): Single<Boolean> {
+        return Single.fromCallable {
+
+            val entity = repositoryDataMapper.transformModel(repositoryModel)
+
+            val i = db.repoDao().insert(entity)
+
+            i != 0L
+        }
+    }
 
     override fun getRepoDetails(fullName: String): Single<DetailResponse> {
         throw UnsupportedOperationException()

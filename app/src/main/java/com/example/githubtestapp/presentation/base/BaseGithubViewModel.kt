@@ -7,4 +7,10 @@ import com.upstream.basemvvmimpl.presentation.model.BaseViewModel
 abstract class BaseGithubViewModel(bundle : Bundle? = null) : BaseViewModel(bundle) {
 
     override fun updateLanguage(context: Context) {}
+
+    override fun onCleared() {
+        super.onCleared()
+
+        dispose()
+    }
 }

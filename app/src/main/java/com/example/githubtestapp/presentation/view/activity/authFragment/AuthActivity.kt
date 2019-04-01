@@ -19,6 +19,12 @@ import kotlinx.android.synthetic.main.activity_auth.*
 
 class AuthActivity : AppCompatActivity(), View.OnClickListener {
 
+    companion object {
+        const val SIGN_OUT_KEY = "sign_out"
+    }
+
+    private var isSignOut = false
+
     private val TAG = "SignInActivity"
     private val RC_SIGN_IN = 9001
 
@@ -27,6 +33,8 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
+
+        isSignOut = intent.getBooleanExtra(SIGN_OUT_KEY, false)
 
         sign_in_button.setOnClickListener(this)
         sign_out_button.setOnClickListener(this)
@@ -96,18 +104,26 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun updateUI(account: GoogleSignInAccount?) {
-        if (account != null) {
-            navigateToMainActivity()
+        when {
+            isSignOut -> {
+                signOut()
+                isSignOut = false
+            }
 
-            status.text = getString(R.string.signed_in_fmt, account.displayName)
+            account != null -> {
+                navigateToMainActivity()
 
-            sign_in_button.visibility = View.GONE
-            sign_out_and_disconnect.visibility = View.VISIBLE
-        } else {
-            status.setText(R.string.signed_out)
+                status.text = getString(R.string.signed_in_fmt, account.displayName)
 
-            sign_in_button.visibility = View.VISIBLE
-            sign_out_and_disconnect.visibility = View.GONE
+                sign_in_button.visibility = View.GONE
+                sign_out_and_disconnect.visibility = View.VISIBLE
+            }
+            else -> {
+                status.setText(R.string.signed_out)
+
+                sign_in_button.visibility = View.VISIBLE
+                sign_out_and_disconnect.visibility = View.GONE
+            }
         }
     }
 

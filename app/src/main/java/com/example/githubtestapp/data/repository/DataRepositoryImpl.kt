@@ -13,6 +13,12 @@ class DataRepositoryImpl @Inject constructor(
     private val repoDataStoreFactory: RepoDataStoreFactory
 ) : DataRepository {
 
+    override fun saveRepository(repository: RepositoryModel): Single<Boolean> {
+        val dataSource = repoDataStoreFactory.createDbDataStore()
+
+        return dataSource.saveRepo(repository)
+    }
+
     override fun getRepoDetails(fullName: String): Single<DetailResponse> {
         return if (Utils.isOnline()) {
             val dataStore = repoDataStoreFactory.createCloudDataStore()
